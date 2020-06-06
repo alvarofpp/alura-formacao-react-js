@@ -8,7 +8,7 @@ class Negociacao {
     }
 
     get volume() {
-        return this._quantidade + this._valor;
+        return this._quantidade * this._valor;
     }
 
     get data() {
@@ -21,5 +21,13 @@ class Negociacao {
 
     get valor() {
         return this._valor;
+    }
+
+    static create({data = new Date(), quantidade = 1, valor = 1.0}) {
+        return new Negociacao(
+            data,
+            quantidade,
+            valor,
+        );
     }
 }

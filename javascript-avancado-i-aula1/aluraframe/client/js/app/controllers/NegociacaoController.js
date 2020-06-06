@@ -4,35 +4,31 @@ class NegociacaoController {
         this._inputData = $('#data');
         this._inputQuantidade = $('#quantidade');
         this._inputValor = $('#valor');
-
         this._listaNegociacoes = new ListaNegociacoes();
-        this._negociacoesView = new NegociacoesView($('#negociacoesView'));
-        this._negociacoesView.update();
 
-        this._mensagem = new Mensagem();
+        this._negociacoesView = new NegociacoesView($('#negociacoesView'));
+        this._negociacoesView.update(this._listaNegociacoes);
+
         this._mensagemView = new MensagemView($('#mensagemView'));
-        this._mensagemView.update(this._mensagem);
+        this._mensagemView.update();
     }
 
     adiciona(event) {
         event.preventDefault();
 
-        let negociacao = this._criaNegociacao();
-
-        this._listaNegociacoes.adicionar(negociacao);
-        this._limpaFormulario();
+        this._listaNegociacoes.adicionar(this._criaNegociacao());
         this._negociacoesView.update(this._listaNegociacoes);
+        this._mensagemView.update('Negociação adicionada com sucesso!');
 
-        this._mensagem.texto = 'Negociação adicionada com sucesso!';
-        this._mensagemView.update(this._mensagem);
+        this._limpaFormulario();
     }
 
     _criaNegociacao() {
-        return new Negociacao(
-            DateHelper.textoParaData(this._inputData.value),
-            this._inputQuantidade.value,
-            this._inputValor.value,
-        );
+        return Negociacao.create({
+            data: DateHelper.textoParaData(this._inputData.value),
+            quantidade: this._inputQuantidade.value,
+            valor: this._inputValor.value
+        });
     }
 
     _limpaFormulario() {
