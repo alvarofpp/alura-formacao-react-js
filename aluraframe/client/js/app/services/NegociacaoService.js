@@ -1,20 +1,46 @@
 class NegociacaoService {
-    obterNegociacaoDaSemana(cb) {
+    constructor() {
+        this._http = new HttpService();
+    }
 
-        let xhr = new XMLHttpRequest();
-        xhr.open('GET', 'negociacoes/semana');
+    obterNegociacoesDaSemana() {
+        return this._http
+            .get('negociacoes/semana')
+            .then((negociacoes) => {
+                return negociacoes.map((objeto) => Negociacao.create(new Date(objeto.data), objeto.quantidade, objeto.valor));
+            }).catch(erro => {
+                throw new Error('Não foi possível obter as negociações da semana.')
+            });
+    }
 
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    cb(null, JSON.parse(xhr.responseText)
-                        .map((objeto) => Negociacao.create(new Date(objeto.data), objeto.quantidade, objeto.valor)));
-                } else {
-                    cb('Não foi possível obter as negociações.', null);
-                }
-            }
-        };
+    obterNegociacoesDaSemanaRetrasada() {
+        return this._http
+            .get('negociacoes/retrasada')
+            .then((negociacoes) => {
+                return negociacoes.map((objeto) => Negociacao.create(new Date(objeto.data), objeto.quantidade, objeto.valor));
+            }).catch(erro => {
+                throw new Error('Não foi possível obter as negociações da semana retrasada.')
+            });
+    }
 
-        xhr.send();
+    obterNegociacoesDaSemanaAnterior() {
+        return this._http
+            .get('negociacoes/anterior')
+            .then((negociacoes) => {
+                return negociacoes.map((objeto) => Negociacao.create(new Date(objeto.data), objeto.quantidade, objeto.valor));
+            }).catch(erro => {
+                throw new Error('Não foi possível obter as negociações da semana anterior.')
+            });
+    }
+
+    obterNegociacoes() {
+        return Promise.all([
+            this.obterNegociacoesDaSemana(),
+            this.obterNegociacoesDaSemanaAnterior(),
+            this.obterNegociacoesDaSemanaRetrasada()
+        ]).then(periodos => periodos.reduce((dados, periodo) => dados.concat(periodo), []))
+            .catch(erro => {
+                throw new Error(erro);
+            });
     }
 }
