@@ -23,6 +23,12 @@ class Negociacao {
         return this._valor;
     }
 
+    isEquals(outraNegociacao) {
+        return this._data.getTime() === outraNegociacao.data.getTime()
+            && this._quantidade === outraNegociacao.quantidade
+            && this._valor === outraNegociacao.valor;
+    }
+
     static create({data = new Date(), quantidade = 1, valor = 1.0}) {
         return new Negociacao(
             data,
