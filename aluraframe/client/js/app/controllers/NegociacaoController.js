@@ -18,15 +18,38 @@ class NegociacaoController {
         );
 
         this._ordemAtual = '';
+
+        ConnectionFactory
+            .getConnection()
+            .then(connection => new NegociacaoDao(connection))
+            .then(dao => dao.listaTodos())
+            .then(negociacoes => {
+                negociacoes.forEach(negociacao => {
+                    this._listaNegociacoes.adiciona(negociacao);
+                });
+            })
+            .catch(erro => {
+                this._mensagem.texto = erro;
+            });
     }
 
     adiciona(event) {
         event.preventDefault();
+        ConnectionFactory
+            .getConnection()
+            .then(connection => {
+                let negociacao = this._criaNegociacao();
 
-        this._listaNegociacoes.adiciona(this._criaNegociacao());
-        this._mensagem.texto = 'Negociação adicionada com sucesso!';
+                new NegociacaoDao(connection)
+                    .adiciona(negociacao)
+                    .then(() => {
+                        this._listaNegociacoes.adiciona(negociacao);
+                        this._mensagem.texto = 'Negociação adicionada com sucesso!';
+                        this._limpaFormulario();
+                    });
+            })
+            .catch(erro => this._mensagem.texto = erro);
 
-        this._limpaFormulario();
     }
 
     importaNegociacoes() {
@@ -40,12 +63,19 @@ class NegociacaoController {
     }
 
     apaga() {
-        this._listaNegociacoes.esvazia();
-        this._mensagem.texto = 'Negociações apagadas com sucesso!';
+        ConnectionFactory
+            .getConnection()
+            .then(connection => new NegociacaoDao(connection))
+            .then(dao => dao.apagarTodos())
+            .then(mensagem => {
+                this._listaNegociacoes.esvazia();
+                this._mensagem.texto = mensagem;
+            })
+            .catch(error => this._mensagem.texto = error);
     }
 
     ordena(coluna) {
-        if(this._ordemAtual === coluna) {
+        if (this._ordemAtual === coluna) {
             this._listaNegociacoes.inverteOrdem();
         } else {
             this._listaNegociacoes.ordena((a, b) => a[coluna] - b[coluna]);
@@ -56,8 +86,8 @@ class NegociacaoController {
     _criaNegociacao() {
         return Negociacao.create({
             data: DateHelper.textoParaData(this._inputData.value),
-            quantidade: this._inputQuantidade.value,
-            valor: this._inputValor.value
+            quantidade: parseInt(this._inputQuantidade.value),
+            valor: parseFloat(this._inputValor.value)
         });
     }
 
