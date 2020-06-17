@@ -11,7 +11,7 @@ Os cursos são divididos em 3 partes:
 - [ ] **Avançando em JavaScript**
   - [X] \[Curso\] JavaScript: Conhecendo o Browser e padrões de projeto
   - [X] \[Curso\] JavaScript: Aprofundando em MVC, padrão Proxy e Factory
-  - [ ] \[Curso\] JavaScript: Salvando dados localmente com IndexedDB
+  - [X] \[Curso\] JavaScript: Salvando dados localmente com IndexedDB
   - [ ] \[Podcast\] O Reino encantado do JavaScript - Hipsters #38 - Hipsters Ponto TechHipsters
 - [ ] **Webpack**
   - [ ] \[Curso\] Webpack: Manipulando módulos na sua webapp
