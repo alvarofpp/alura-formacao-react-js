@@ -26,6 +26,7 @@
     "cssnano": "^4.1.10",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^0.11.2",
+    "jquery": "^3.5.1",
     "optimize-css-assets-webpack-plugin": "^2.0.0",
     "style-loader": "^0.18.2",
     "url-loader": "^4.1.0",
