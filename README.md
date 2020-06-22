@@ -14,7 +14,7 @@ Os cursos são divididos em 3 partes:
   - [X] \[Curso\] JavaScript: Salvando dados localmente com IndexedDB
   - [ ] \[Podcast\] O Reino encantado do JavaScript - Hipsters #38 - Hipsters Ponto TechHipsters
 - [ ] **Webpack**
-  - [ ] \[Curso\] Webpack: Manipulando módulos na sua webapp
+  - [X] \[Curso\] Webpack: Manipulando módulos na sua webapp
 - [ ] **React**
   - [ ] \[Poscast\] React: o framework onipresente - Hipsters #66 - Hipsters Ponto TechHipsters Ponto Tech
   - [ ] \[Curso\] React parte 1: Componentes reutilizáveis para sua webapp
