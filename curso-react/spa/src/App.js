@@ -5,57 +5,42 @@ import Tabela from './Tabela';
 import Form from "./Formulario";
 import Header from "./Header";
 import PopUp from "./PopUp";
+import ApiService from "./ApiService";
 
 
 class App extends Component {
-    state = {
-        autores: [
-            {
-                nome: 'Paulo',
-                livro: 'React',
-                preco: '1000'
-            },
-            {
-                nome: 'Daniel',
-                livro: 'Java',
-                preco: '99'
-            },
-            {
-                nome: 'Marcos',
-                livro: 'Design',
-                preco: '150'
-            },
-            {
-                nome: 'Bruno',
-                livro: 'DevOps',
-                preco: '100'
-            }
-        ]
-    };
+    constructor(props) {
+        super(props);
 
-    removeAutor = (index) => {
+        this.state = {
+            autores: []
+        };
+    }
+
+    removeAutor = (id) => {
         const {autores} = this.state;
 
         this.setState({
-            autores: autores.filter((autor, posAtual) => {
-                return posAtual !== index;
+            autores: autores.filter((autor) => {
+                return autor.id !== id;
             }),
         });
-        PopUp.exibeMensagem("error", "Autor removido com sucesso.")
-    };
+        PopUp.exibeMensagem("error", "Autor removido com sucesso.");
+        ApiService.removeAutor(id);
+    }
 
     escutadorDeSubmit = (autor) => {
-        this.setState({
-            autores: [...this.state.autores, autor]
-        });
-        PopUp.exibeMensagem("success", "Autor adicionado com sucesso.");
-    };
+        ApiService.criaAutor(JSON.stringify(autor))
+            .then((res) => res.data)
+            .then((autor) => {
+                this.setState({
+                    autores: [...this.state.autores, autor]
+                });
+                PopUp.exibeMensagem("success", "Autor adicionado com sucesso.");
+            });
+    }
 
     render() {
-        fetch('http://localhost:8000/api/autor')
-            .then(res => res.json())
-            .then(res => console.log(res.data));
-
         return (
             <Fragment>
                 <Header/>
@@ -66,6 +51,15 @@ class App extends Component {
                 </div>
             </Fragment>
         );
+    }
+
+    componentDidMount() {
+        ApiService.listaAutores()
+            .then((res) => {
+                this.setState({
+                    autores: [...this.state.autores, ...res.data]
+                });
+            });
     }
 }
 
