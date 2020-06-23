@@ -2,6 +2,7 @@ import React, {Component, Fragment} from 'react';
 import Header from './Header';
 import DataTable from './DataTable';
 import ApiService from "./ApiService";
+import PopUp from "./PopUp";
 
 
 class Autores extends Component {
@@ -16,9 +17,12 @@ class Autores extends Component {
 
     componentDidMount() {
         ApiService.listaNomes()
+            .then((res) => ApiService.tratarErros(res))
             .then((res) => {
-                this.setState({nomes: [...this.state.nomes, ...res.data]});
-            });
+                if (res.message === 'success') {
+                    this.setState({nomes: [...this.state.nomes, ...res.data]});
+                }
+            }).catch((err) => PopUp.exibeMensagem('error', 'Erro na comunicação com a API.'));
     }
 
     render() {
