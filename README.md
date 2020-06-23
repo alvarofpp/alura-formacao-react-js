@@ -18,5 +18,5 @@ Os cursos são divididos em 3 partes:
 - [ ] **React**
   - [ ] \[Poscast\] React: o framework onipresente - Hipsters #66 - Hipsters Ponto TechHipsters Ponto Tech
   - [X] \[Curso\] React parte 1: Componentes reutilizáveis para sua webapp
-  - [ ] \[Curso\] React parte 2: Validação, Rotas e Integração com API
+  - [X] \[Curso\] React parte 2: Validação, Rotas e Integração com API
   - [ ] \[Curso\] React: boas práticas e refatoração
