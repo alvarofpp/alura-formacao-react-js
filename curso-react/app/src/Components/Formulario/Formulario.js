@@ -1,6 +1,5 @@
 import React, {Component, Fragment} from "react";
 import FormValidator from "../../utils/FormValidator";
-import PopUp from "../../utils/PopUp";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
@@ -37,7 +36,11 @@ class Form extends Component {
             livro: '',
             preco: '',
             validacao: this.validador.valido(),
-            open: true
+            mensagem: {
+                open: false,
+                texto: '',
+                tipo: 'success',
+            }
         };
         this.state = this.stateInicial;
     }
@@ -62,8 +65,16 @@ class Form extends Component {
             const camposInvalidos = campos.filter((elemento) => {
                 return elemento.isInvalid;
             });
-            camposInvalidos.forEach((campo) => {
-                PopUp.exibeMensagem("error", campo.message);
+            const erros = camposInvalidos.reduce(
+                (texto, campo) => texto + campo.message + '. ',
+                ''
+            );
+            this.setState({
+                mensagem: {
+                    open: true,
+                    texto: erros,
+                    tipo: 'error'
+                }
             });
         }
     };
@@ -73,9 +84,15 @@ class Form extends Component {
 
         return (
             <Fragment>
-                <Toast open={this.state.open}
-                       handleClose={() => this.setState({open: false})}>
-                    Toast funcionando
+                <Toast open={this.state.mensagem.open}
+                       handleClose={() =>
+                           this.setState({
+                               mensagem: {
+                                   open: false,
+                               }
+                           })
+                       } severity={this.state.mensagem.tipo}>
+                    {this.state.mensagem.texto}
                 </Toast>
                 <form>
                     <Grid container spacing={2} alignItems='center'>
